@@ -121,7 +121,7 @@
                 )
             },
             signInButtonFun() {
-                this.$router.push('/')
+                this.$router.push('/content/home')
             }
         }
     }
