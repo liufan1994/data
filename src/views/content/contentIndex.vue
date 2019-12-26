@@ -2,7 +2,7 @@
     <!-- 内容公共页面 -->
     <div class="contentIndex">
         <!-- 侧边导航 -->
-        <el-menu default-active="1-4" class="el-menu-vertical-demo" :collapse="isCollapse" @select="handleSelect" background-color="#001529" text-color="#8F9FB3" active-text-color="#fff">
+        <el-menu :default-active="myIndex" class="el-menu-vertical-demo" :collapse="isCollapse" @select="handleSelect" background-color="#001529" text-color="#8F9FB3" active-text-color="#fff">
             <!-- 顶部 -->
             <el-radio-group :class="{homeTitle2:isCollapse===false}" class="homeTitle" v-model="isCollapse">
                 <el-radio-button class="homeTitleImg" :label="false" v-if="isCollapse===true">
@@ -16,39 +16,18 @@
                 </div>
             </el-radio-group>
             <!-- 导航一 -->
-            <el-menu-item index="1">
+            <!-- <el-menu-item index="1">
                 <i class="el-icon-s-home"></i>
                 <span slot="title">首页</span>
-            </el-menu-item>
-            <!-- 导航二 -->
-            <el-menu-item index="2">
-                <i class="el-icon-s-data"></i>
-                <span slot="title">市场活动</span>
-            </el-menu-item>
+            </el-menu-item> -->
             <!-- 导航三 -->
-            <el-submenu index="3">
+            <el-submenu v-for="(submenu,index) in marketingMenu" :key="index" :index="submenu.link">
                 <template slot="title">
-                    <i class="el-icon-s-grid"></i>
-                    <span slot="title">营销模版</span>
+                    <i :class="submenu.icon"></i>
+                    <span slot="title">{{submenu.name}}</span>
                 </template>
-                <el-menu-item index="3-1">我的作品</el-menu-item>
-                <el-menu-item index="3-2">全部作品</el-menu-item>
-                <el-menu-item index="3-3">官方模版库</el-menu-item>
+                <el-menu-item v-for="(item,index2) in submenu.menu" :key="index2" :index="item.link">{{item.name}}</el-menu-item>
             </el-submenu>
-            <!-- 导航四 -->
-            <el-submenu index="4">
-                <template slot="title">
-                    <i class="el-icon-s-custom"></i>
-                    <span slot="title">智能名片</span>
-                </template>
-                <el-menu-item index="4-1">我的名片</el-menu-item>
-                <el-menu-item index="4-2">全部名片</el-menu-item>
-            </el-submenu>
-            <!-- 导航五 -->
-            <el-menu-item index="5">
-                <i class="el-icon-picture"></i>
-                <span slot="title">素材库</span>
-            </el-menu-item>
         </el-menu>
         <!-- 右边 -->
         <div class="homeRight">
@@ -56,8 +35,8 @@
             <div class="homeTop">
                 <i class="el-icon-menu"></i>
                 <div class="homeTopRight">
-                    <el-avatar :size="30" :src="require('../../assets/Plant.png')"></el-avatar>
-                    <div class="homeTopRightName">{{homeTopName}}</div>
+                    <el-avatar :size="30" :src="user.headImg"></el-avatar>
+                    <div class="homeTopRightName">{{user.name}}</div>
                     <i class="el-icon-caret-bottom"></i>
                 </div>
             </div>
@@ -74,20 +53,44 @@
                 // 控制是否收缩
                 isCollapse: false,
                 // 顶部用户名称
-                homeTopName: '风清扬(1002)'
+                homeTopName: '风清扬(1002)',
+                // 默认选中的侧边栏选项
+                myIndex: '1',
+                // 用户信息
+                user: '',
+                marketingMenu: []
             }
         },
         methods: {
             // 菜单激活回调
             handleSelect(index) {
-                console.log(index)
-                if (index === '3-1') {
-                    this.$router.push('/content/myWork/myWorkImg')
-                }
+                this.myIndex = index
+                console.log(this.myIndex)
+                this.$router.push(index)
+                // if (index === '1') {
+                //     this.$router.push('/content/home')
+                // }
+                // if (index === '3-1') {
+                //     this.$router.push('/content/myWork/myWorkImg')
+                // }
+                // if (index === '3-2') {
+                //     this.$router.push('/content/myWork/wholeWork')
+                // }
             }
         },
-        watch: {
-            $route() {}
+        created() {
+            this.user = JSON.parse(localStorage.getItem('user'))
+            this.axios
+                .get('/api/biz/v1/acl/tree', {
+                    headers: { Authorization: this.user.sid }
+                })
+                .then(res => {
+                    if (res.data.success) {
+                        this.marketingMenu = res.data.data.marketingMenu
+                        console.log('a')
+                        console.log(this.marketingMenu)
+                    }
+                })
         }
     }
 </script>
@@ -152,8 +155,11 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
             // 顶部
             .homeTop {
+                width: 100%;
+                box-sizing: border-box;
                 height: 64px;
                 display: flex;
                 justify-content: space-between;
@@ -176,6 +182,7 @@
             }
             // 内容
             .homeContent {
+                width: 100%;
                 height: calc(100% - 64px);
                 box-sizing: border-box;
                 background-color: #fff;

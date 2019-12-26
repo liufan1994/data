@@ -24,4 +24,9 @@
     img {
         object-fit: cover;
     }
+    .el-button,
+    .el-input__inner::-webkit-input-placeholder {
+        font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+            'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+    }
 </style>

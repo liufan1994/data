@@ -35,6 +35,12 @@ const routes = [
                         path: 'myWorkImg',
                         component: () =>
                             import('../views/content/myWork/myWorkImg.vue')
+                    },
+                    // 全部作品-表格形式
+                    {
+                        path: 'wholeWork',
+                        component: () =>
+                            import('../views/content/myWork/wholeWork.vue')
                     }
                 ]
             }

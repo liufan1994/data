@@ -66,6 +66,8 @@
     </div>
 </template>
 <script>
+    import MD5 from 'md5'
+
     export default {
         name: 'signIn',
         data() {
@@ -108,20 +110,43 @@
                 this.isShowFu = !this.isShowFu
             },
             // 密码框失去焦点或点击回车键
-            passwordFun() {
-                console.log(this.input2)
-                if (this.input2.length < 6) {
-                    this.$message.error('密码长度至少是6位数')
-                }
-            },
+            passwordFun() {},
             passwordFun2(Cur) {
                 Cur.value = Cur.value.replace(
                     /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/g,
                     ''
                 )
             },
+            // 点击登录
             signInButtonFun() {
-                this.$router.push('/content/home')
+                console.log(this.ruleForm)
+                let password = this.ruleForm.input2
+                password = MD5(password + '1qaz2wsx3edc4rfv!@#$%^&tRTWDF')
+                this.axios
+                    .post('/api/biz/v1/user/login', {
+                        name: this.ruleForm.input,
+                        password
+                    })
+                    .then(res => {
+                        if (res.data.success) {
+                            // ok
+                            this.$router.push('/content/home')
+                            localStorage.setItem(
+                                'user',
+                                JSON.stringify(res.data.data)
+                            )
+                            // let data2 = JSON.parse(localStorage.getItem('key'))
+                            // console.log(data2)
+                        } else {
+                            // no
+                            this.$message.error(res.data.msg)
+                        }
+                    })
+                    .catch(err => {
+                        if (err.response.status === 401) {
+                            this.$message.error('登录过期，请重新登录')
+                        }
+                    })
             }
         }
     }

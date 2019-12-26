@@ -1,13 +1,11 @@
 <template>
     <!-- 我的作品-图片展示形式 -->
     <div class="myWorkImg">
-        <!-- 顶部tab -->
-        <div class="myWorkTab">
-            <div :class="{myWorkTabName2:isShowMyWorkTab}" class="myWorkTabName" @click="myWorkTabH5Fun">H5</div>
-            <div :class="{myWorkTabName2:!isShowMyWorkTab}" class="myWorkTabName" @click="myWorkTabBdFun">表单</div>
-        </div>
+        <!-- tab -->
+        <workTab/>
         <!-- 表单内容 -->
         <div class="myWorkContent">
+            <!-- 作品 -->
             <div class="myWorkContent1" v-for="(myWork,index) in myWorks" :key="index">
                 <div class="myWorkContentTop">
                     <!-- 作品图片 -->
@@ -56,16 +54,31 @@
                     </div>
                 </div>
             </div>
+            <!-- 新建 -->
+            <div class="myWorkNew">
+                <!-- 模版创建 -->
+                <div class="myWorkNew1">
+                    <div class="iconfont icon-tianjia1"></div>
+                    <div>模版创建</div>
+                </div>
+                <!-- 空白创建 -->
+                <div class="myWorkNew1 myWorkNew2">空白创建</div>
+            </div>
         </div>
     </div>
 </template>
 <script>
+    // tab
+    import workTab from '../../../components/workTab'
+
     export default {
         name: 'myWorkImg',
+        components: {
+            workTab
+        },
         data() {
             return {
-                // 顶部tab是否选中
-                isShowMyWorkTab: false,
+                // 作品
                 myWorks: [
                     {
                         // 内容-图片路径
@@ -122,43 +135,23 @@
                 ]
             }
         },
-        methods: {
-            // 点击H5tab
-            myWorkTabH5Fun() {
-                this.isShowMyWorkTab = true
-            },
-            // 点击表单tab
-            myWorkTabBdFun() {
-                this.isShowMyWorkTab = false
-            }
+        methods: {},
+        created() {
+            this
         }
     }
 </script>
 <style lang="scss" scoped>
     .myWorkImg {
         height: 100%;
-        .myWorkTab {
-            height: 60px;
-            display: flex;
-            border-bottom: #e8e8e8 1px solid;
-            .myWorkTabName {
-                width: 62px;
-                text-align: center;
-                line-height: 60px;
-                font-size: 16px;
-            }
-            .myWorkTabName2 {
-                color: #009cff;
-                border-bottom: #009cff 2px solid;
-            }
-        }
         .myWorkContent {
-            height: calc(100% - 60px);
+            height: calc(100% - 61px);
             display: flex;
             flex-wrap: wrap;
             overflow-y: auto;
             padding-bottom: 30px;
             box-sizing: border-box;
+            // 作品
             .myWorkContent1 {
                 width: 262px;
                 height: 346px;
@@ -199,7 +192,6 @@
                             padding: 0;
                             color: #fff;
                             background-color: rgba(255, 255, 255, 0.2);
-                            font-family: PingFangSC-Regular, PingFang SC;
                         }
                         &/deep/.el-button:hover {
                             border: #009cff 1px solid;
@@ -266,6 +258,30 @@
             }
             .myWorkContent1:hover {
                 box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.1);
+            }
+            // 新建
+            .myWorkNew {
+                margin-top: 30px;
+                margin-left: 28px;
+                .myWorkNew1 {
+                    width: 262px;
+                    height: 262px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    border: #d9d9d9 1px dashed;
+                    background-color: #fafafa;
+                    color: #595959;
+                    .icon-tianjia1 {
+                        font-size: 24px;
+                        margin-bottom: 12px;
+                    }
+                }
+                .myWorkNew2 {
+                    height: 60px;
+                    margin-top: 20px;
+                }
             }
         }
     }
