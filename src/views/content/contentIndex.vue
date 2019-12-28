@@ -15,19 +15,21 @@
                     </el-radio-button>
                 </div>
             </el-radio-group>
-            <!-- 导航一 -->
-            <!-- <el-menu-item index="1">
-                <i class="el-icon-s-home"></i>
-                <span slot="title">首页</span>
-            </el-menu-item> -->
-            <!-- 导航三 -->
-            <el-submenu v-for="(submenu,index) in marketingMenu" :key="index" :index="submenu.link">
-                <template slot="title">
-                    <i :class="submenu.icon"></i>
+            <div v-for="(submenu,index) in marketingMenu" :key="index">
+                <!-- 导航-有子集 -->
+                <el-submenu :index="submenu.link" v-if="submenu.menu">
+                    <template slot="title">
+                        <i class="iconfont" :class="'icon-mk-'+submenu.icon"></i>
+                        <span slot="title">{{submenu.name}}</span>
+                    </template>
+                    <el-menu-item v-for="(item,index2) in submenu.menu" :key="index2" :index="item.link">{{item.name}}</el-menu-item>
+                </el-submenu>
+                <!-- 导航-无子集 -->
+                <el-menu-item :index="submenu.link" v-else>
+                    <i class="iconfont" :class="'icon-mk-'+submenu.icon"></i>
                     <span slot="title">{{submenu.name}}</span>
-                </template>
-                <el-menu-item v-for="(item,index2) in submenu.menu" :key="index2" :index="item.link">{{item.name}}</el-menu-item>
-            </el-submenu>
+                </el-menu-item>
+            </div>
         </el-menu>
         <!-- 右边 -->
         <div class="homeRight">
@@ -55,42 +57,44 @@
                 // 顶部用户名称
                 homeTopName: '风清扬(1002)',
                 // 默认选中的侧边栏选项
-                myIndex: '1',
+                myIndex: '/workbench',
                 // 用户信息
                 user: '',
-                marketingMenu: []
+                // 侧边栏菜单
+                marketingMenu: [],
+                // 侧边栏标题有子集显示
+                isShowSubmenu: true
             }
         },
         methods: {
             // 菜单激活回调
             handleSelect(index) {
-                this.myIndex = index
-                console.log(this.myIndex)
                 this.$router.push(index)
-                // if (index === '1') {
-                //     this.$router.push('/content/home')
-                // }
-                // if (index === '3-1') {
-                //     this.$router.push('/content/myWork/myWorkImg')
-                // }
-                // if (index === '3-2') {
-                //     this.$router.push('/content/myWork/wholeWork')
-                // }
             }
         },
         created() {
             this.user = JSON.parse(localStorage.getItem('user'))
             this.axios
                 .get('/api/biz/v1/acl/tree', {
-                    headers: { Authorization: this.user.sid }
+                    headers: {
+                        Authorization: this.user.sid
+                    }
                 })
                 .then(res => {
                     if (res.data.success) {
                         this.marketingMenu = res.data.data.marketingMenu
-                        console.log('a')
                         console.log(this.marketingMenu)
                     }
                 })
+        },
+        watch: {
+            $route: {
+                handler(newVal) {
+                    this.myIndex = newVal.path
+                    // console.log(this.myIndex)
+                },
+                immediate: true
+            }
         }
     }
 </script>

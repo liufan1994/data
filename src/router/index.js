@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
     // 登录
     {
-        path: '/',
+        path: '/signIn',
         name: 'signIn',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
@@ -16,31 +16,42 @@ const routes = [
     },
     // 内容
     {
-        path: '/content',
+        path: '/',
         name: 'content',
         component: () => import('../views/content/contentIndex.vue'),
         children: [
-            // 首页
+            // 工作台
             {
-                path: 'home',
-                component: () => import('../views/content/home.vue')
+                path: 'workbench',
+                component: () => import('../views/content/workbench.vue')
             },
-            // 我的作品
+            // 营销内容
             {
-                path: 'myWork',
-                component: () => import('../views/content/myWork/index.vue'),
+                path: 'marketing-content',
+                component: () =>
+                    import('../views/content/marketing-content/index.vue'),
                 children: [
-                    // 我的作品-图片展示形式
+                    // 营销内容-营销资料
                     {
-                        path: 'myWorkImg',
+                        path: 'marketing-data',
                         component: () =>
-                            import('../views/content/myWork/myWorkImg.vue')
-                    },
-                    // 全部作品-表格形式
+                            import(
+                                '../views/content/marketing-content/marketing-data.vue'
+                            )
+                    }
+                ]
+            },
+            // 微信线索
+            {
+                path: '/wechat-lead',
+                component: () =>
+                    import('../views/content/wechat-lead/index.vue'),
+                children: [
+                    // 全部线索
                     {
-                        path: 'wholeWork',
+                        path: 'all-lead',
                         component: () =>
-                            import('../views/content/myWork/wholeWork.vue')
+                            import('../views/content/wechat-lead/all-lead.vue')
                     }
                 ]
             }
