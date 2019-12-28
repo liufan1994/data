@@ -21,6 +21,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: left;
+
         color: #333;
         font-size: 14px;
     }
