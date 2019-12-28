@@ -74,9 +74,9 @@
             return {
                 ruleForm: {
                     // 账号输入框
-                    input: '',
+                    input: '18684043192',
                     // 密码输入框
-                    input2: ''
+                    input2: 'Abcd1234'
                 },
                 rules: {
                     input: [
@@ -130,7 +130,7 @@
                     .then(res => {
                         if (res.data.success) {
                             // ok
-                            this.$router.push('/content/home')
+                            this.$router.push('/workbench')
                             localStorage.setItem(
                                 'user',
                                 JSON.stringify(res.data.data)
@@ -237,6 +237,7 @@
                     font-size: 16px;
                     border-radius: 4px;
                     line-height: 40px;
+                    text-align: center;
                     margin-top: 12px;
                     margin-bottom: 28px;
                 }
