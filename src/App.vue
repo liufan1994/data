@@ -11,6 +11,9 @@
 
 
 <style lang="scss">
+    html {
+        font-size: 10vw;
+    }
     #app {
         height: 100vh;
         font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
